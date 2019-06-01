@@ -4,6 +4,8 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ServerController {
 
@@ -14,9 +16,10 @@ public class ServerController {
     //API ENDPOINT USATI COME TEST
     @GetMapping(path = "/all")
     public @ResponseBody
-    Light getAllUsers() {
+    List<Light> getAllUsers() {
 
-        return (Light) dao.getAll();
+        List<Light> light = dao.getAll();
+        return light;
     }
     //-----------------------------------------------------------------
 

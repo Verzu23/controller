@@ -19,7 +19,7 @@ public class ServerDAO {
 
     public List<Light> getAll() {
 
-        List light = new ArrayList();
+        List<Light> light = new ArrayList<Light>();
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(SQL);
 
 
