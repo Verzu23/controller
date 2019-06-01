@@ -48,7 +48,7 @@ public class ServerDAO {
     public int check() {
 
         try {
-            id = Math.toIntExact((int) jdbcTemplate.queryForList("select \"command\" from public.light").get(0).get("command"));
+            id = Math.toIntExact((int) jdbcTemplate.queryForList("select \"command\" as com from public.light").get(0).get("com"));
 
         } catch (Exception e) {
             id = 0;
