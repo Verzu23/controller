@@ -14,170 +14,47 @@ public class ServerDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String SQL = "SELECT * FROM sarcopenia_db.paziente ORDER BY \"idPaziente\" ASC;";
+    private static final String SQL = "SELECT * FROM public.light;";
     int id;
 
-    public List<Paziente> getAll() {
+    public List<Light> getAll() {
 
-        List<Paziente> pazienti = new ArrayList<Paziente>();
+        List light = new ArrayList<Light>();
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(SQL);
 
 
         for (Map<String, Object> row : rows) {
 
-            Paziente paziente = new Paziente();
-            paziente.setId((int) row.get("idPaziente"));
-            paziente.setCF((String) row.get("CF"));
-            paziente.setNome((String) row.get("Nome"));
-            paziente.setCognome((String) row.get("Cognome"));
-            paziente.setBirthday((String) row.get("Birthday"));
-            paziente.setSesso((String) row.get("Sesso"));
-            paziente.setResidenza((String) row.get("Residenza"));
-            paziente.setTelefono((String) row.get("Telefono"));
-            paziente.setAltezza((int) row.get("Altezza"));
-            paziente.setPeso((int) row.get("Peso"));
+            Light light1 = new Light();
+            light1.setId((int) row.get("id"));
+            light1.setStatus((int)row.get("command"));
 
-            pazienti.add(paziente);
+            light.add(light1);
         }
 
-        return pazienti;
+        return light;
     }
 
-    public void insert(String nome, String cognome) {
+    public void set() {
 
-        try {
-            id = Math.toIntExact((int) jdbcTemplate.queryForList("SELECT max(\"idPaziente\") as \"max\" FROM sarcopenia_db.paziente").get(0).get("max"));
-
-        } catch (Exception e) {
-            id = 0;
+        if(check()==0) {
+            jdbcTemplate.execute("INSERT INTO public.light (\"command\") VALUES ('1');");
         }
-        id++;
-        jdbcTemplate.execute("INSERT INTO sarcopenia_db.paziente (\"idPaziente\", \"Nome\", \"Cognome\") VALUES ( " + id + ", '" + nome + "', '" + cognome + "');");
-
+        else {
+            jdbcTemplate.execute("INSERT INTO public.light (\"command\") VALUES ('0');");
+        }
     }
 
-    public int index() {
+    public int check() {
 
         try {
-            id = Math.toIntExact((int) jdbcTemplate.queryForList("SELECT max(\"idPaziente\") as \"max\" FROM sarcopenia_db.paziente").get(0).get("max"));
+            id = Math.toIntExact((int) jdbcTemplate.queryForList("select \"command\" from public.light").get(0).get("command"));
 
         } catch (Exception e) {
             id = 0;
             System.out.println(e);
         }
         return id;
-    }
-
-    public void addNewPatient(String CF, String Nome, String Cognome, String Sesso, String Birthday, String Residenza, String Telefono, long Altezza, long Peso) {
-
-        try {
-            id = Math.toIntExact((int) jdbcTemplate.queryForList("SELECT max(\"idPaziente\") as \"max\" FROM sarcopenia_db.paziente").get(0).get("max"));
-
-        } catch (Exception e) {
-            id = 0;
-        }
-        id++;
-        jdbcTemplate.execute("INSERT INTO sarcopenia_db.paziente (\"idPaziente\", \"Nome\", \"Cognome\", \"Birthday\", \"Sesso\", \"Residenza\", \"Telefono\", \"Altezza\", \"Peso\",\"CF\") " +
-                "VALUES ('" + id + "', '" + Nome + "', '" + Cognome + "', '" + Birthday + "', '" + Sesso + "', '" + Residenza + "', '" + Telefono + "', '" + Altezza + "', '" + Peso + "', '" + CF + "');");
-    }
-
-    public void addNewExam(String Data, int idEsame, float emgMax, float emgMin, float emgAvg, float forMax, float forMin, float forAvg, float tempo, float passi, float frequenza, float velocita, int idpaz){
-
-        try {
-            id = Math.toIntExact((int) jdbcTemplate.queryForList("SELECT max(\"idEsame\") as \"max\" FROM sarcopenia_db.esame").get(0).get("max"));
-
-        } catch (Exception e) {
-            id = 0;
-        }
-        id++;
-
-        jdbcTemplate.execute("INSERT INTO sarcopenia_db.esame(\"idEsame\", \"EMG_Max\", \"EMG_Min\", \"EMG_Avg\", \"Forza_Max\", \"Forza_Min\", \"Forza_Med\", \"Tempo_Prova\", \"Passi\", \"Frequenza_Passi\", \"Velocita\", \"Data\", \"Paziente_idPaziente\")" +
-                "VALUES ('" + id + "', '"+emgMax+"', '"+emgMin+"', '"+emgAvg+"', '"+forMax+"', '"+forMin+"', '"+forAvg+"', '"+tempo+"', '"+passi+"', '"+frequenza+"', '"+velocita+"', '"+Data+"', '"+idpaz+"');");
-
-        System.out.println("INSERT INTO sarcopenia_db.esame(\"idEsame\", \"EMG_Max\", \"EMG_Min\", \"EMG_Avg\", \"Forza_Max\", \"Forza_Min\", \"Forza_Med\", \"Tempo_Prova\", \"Passi\", \"Frequenza_Passi\", \"Velocita\", \"Data\", \"Paziente_idPaziente\")" +
-                "VALUES ('" + id + "', '"+emgMax+"', '"+emgMin+"', '"+emgAvg+"', '"+forMax+"', '"+forMin+"', '"+forAvg+"', '"+tempo+"', '"+passi+"', '"+frequenza+"', '"+velocita+"', '"+Data+"', '"+idpaz+"');");
-    }
-
-
-    public int checkPatient(String CF) {
-
-        List<Paziente> pazienti = new ArrayList<Paziente>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("Select * from sarcopenia_db.paziente where \"CF\"='" + CF + "'");
-        int ID;
-
-        if (rows.isEmpty()) {
-
-            ID = 0;
-
-        } else {
-            for (Map<String, Object> row : rows) {
-                Paziente paziente = new Paziente();
-                paziente.setId((int) row.get("idPaziente"));
-                paziente.setNome((String) row.get("Nome"));
-                paziente.setResidenza((String) row.get("Cognome"));
-
-                pazienti.add(paziente);
-            }
-            ID = pazienti.get(0).getId();
-        }
-        return ID;
-    }
-
-    public int checkExam(String CF) {
-
-    // TODO: 15/05/2019  inizializzare metodo
-
-        return 0;
-    }
-
-
-
-    public List<Paziente> getById(int id) {
-
-        List<Paziente> pazienti = new ArrayList<Paziente>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("Select * from sarcopenia_db.paziente where \"idPaziente\"='" + id + "'");
-
-        for (Map<String, Object> row : rows) {
-            Paziente paziente = new Paziente();
-            paziente.setId((int) row.get("idPaziente"));
-            paziente.setCF((String) row.get("CF"));
-            paziente.setNome((String) row.get("Nome"));
-            paziente.setCognome((String) row.get("Cognome"));
-            paziente.setBirthday((String) row.get("Birthday"));
-            paziente.setSesso((String) row.get("Sesso"));
-            paziente.setResidenza((String) row.get("Residenza"));
-            paziente.setTelefono((String) row.get("Telefono"));
-            paziente.setAltezza((int) row.get("Altezza"));
-            paziente.setPeso((int) row.get("Peso"));
-
-            pazienti.add(paziente);
-        }
-
-        return pazienti;
-    }
-
-    public List<Paziente> getByName(String name) {
-
-        List<Paziente> pazienti = new ArrayList<Paziente>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("Select * from sarcopenia_db.paziente where \"Nome\" ~* '" + name + "' or \"Cognome\" ~* '"+name+"'" );
-
-        for (Map<String, Object> row : rows) {
-            Paziente paziente = new Paziente();
-            paziente.setId((int) row.get("idPaziente"));
-            paziente.setCF((String) row.get("CF"));
-            paziente.setNome((String) row.get("Nome"));
-            paziente.setCognome((String) row.get("Cognome"));
-            paziente.setBirthday((String) row.get("Birthday"));
-            paziente.setSesso((String) row.get("Sesso"));
-            paziente.setResidenza((String) row.get("Residenza"));
-            paziente.setTelefono((String) row.get("Telefono"));
-            paziente.setAltezza((int) row.get("Altezza"));
-            paziente.setPeso((int) row.get("Peso"));
-
-            pazienti.add(paziente);
-        }
-
-        return pazienti;
     }
 
 }

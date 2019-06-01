@@ -14,62 +14,27 @@ public class ServerController {
     //API ENDPOINT USATI COME TEST
     @GetMapping(path = "/all")
     public @ResponseBody
-    int getAllUsers(@RequestParam String Nome, @RequestParam String Cognome) {
+    Light getAllUsers() {
 
-        dao.insert(Nome, Cognome);
-
-        return 100;
-    }
-
-
-    @GetMapping(path = "/al")
-    public @ResponseBody
-    long getAlUsers() {
-        // This returns a JSON or XML with the users
-        return dao.index();
+        return (Light) dao.getAll();
     }
     //-----------------------------------------------------------------
 
 
     //API ENDPOINT USATI DALL'APPLICAZIONE MOBILE
-    @RequestMapping(path = "/Check", method = RequestMethod.POST)
+    @RequestMapping(path = "/Check", method = RequestMethod.GET)
     @ResponseBody
-    public Integer checkLight(@RequestBody Paziente Paz) {
+    public Integer checkLight() {
 
-        int status;
-        Paziente paz = Paz;
-        int foundId = dao.checkPatient(paz.getCF());
+        int foundId = dao.check();
 
-        if (foundId==0) {
-            dao.addNewPatient(paz.getCF(), paz.getNome(), paz.getCognome(), paz.getSesso(), paz.getBirthday(), paz.getResidenza(),
-                    paz.getTelefono(), paz.getAltezza(), paz.getPeso());
-            status = 0;
-        } else {
-
-            //status = (int) foundId;
-            status=foundId;
-        }
-        return status;
+        return foundId;
     }
 
-    @RequestMapping(path = "/Set", method = RequestMethod.POST)
+    @RequestMapping(path = "/Set", method = RequestMethod.GET)
     @ResponseBody
-    public Integer setLight(@RequestBody Paziente Paz) {
+    public void setLight() {
 
-        int status;
-        Paziente paz = Paz;
-        int foundId = dao.checkPatient(paz.getCF());
-
-        if (foundId==0) {
-            dao.addNewPatient(paz.getCF(), paz.getNome(), paz.getCognome(), paz.getSesso(), paz.getBirthday(), paz.getResidenza(),
-                    paz.getTelefono(), paz.getAltezza(), paz.getPeso());
-            status = 0;
-        } else {
-
-            //status = (int) foundId;
-            status=foundId;
-        }
-        return status;
     }
 
 }
