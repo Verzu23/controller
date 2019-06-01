@@ -39,10 +39,10 @@ public class ServerDAO {
     public void set() {
 
         if(check()==0) {
-            jdbcTemplate.execute("UPDATE public.light SET \"id\"='0', \"command\"='1';");
+            jdbcTemplate.execute("UPDATE public.light SET id=0, command=1;");
         }
         else {
-            jdbcTemplate.execute("UPDATE public.light SET \"id\"='0', \"command\"='0';");
+            jdbcTemplate.execute("UPDATE public.light SET id=0, command=0;");
         }
     }
 
