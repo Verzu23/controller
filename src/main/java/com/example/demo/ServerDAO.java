@@ -26,8 +26,8 @@ public class ServerDAO {
         for (Map<String, Object> row : rows) {
 
             Light light1 = new Light();
-            light1.setId((int) row.get("id"));
-            light1.setStatus((int)row.get("command"));
+            light1.setId((Long) row.get("id"));
+            light1.setStatus((Long)row.get("command"));
 
             light.add(light1);
         }
@@ -38,10 +38,10 @@ public class ServerDAO {
     public void set() {
 
         if(check()==0) {
-            jdbcTemplate.execute("INSERT INTO public.light (\"command\") VALUES ('1');");
+            jdbcTemplate.execute("UPDATE public.light SET id=0, command=1;");
         }
         else {
-            jdbcTemplate.execute("INSERT INTO public.light (\"command\") VALUES ('0');");
+            jdbcTemplate.execute("UPDATE public.light SET id=0, command=0;");
         }
     }
 

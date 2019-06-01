@@ -2,22 +2,22 @@ package com.example.demo;
 
 public class Light {
 
-    private int id;
-    private int status;
+    private Long id;
+    private Long status;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getStatus() {
+    public Long getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Long status) {
         this.status = status;
     }
 
