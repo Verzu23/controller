@@ -38,6 +38,8 @@ public class ServerController {
     @ResponseBody
     public void setLight() {
 
+        dao.set();
+
     }
 
 }
