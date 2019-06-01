@@ -32,9 +32,9 @@ public class ServerController {
 
 
     //API ENDPOINT USATI DALL'APPLICAZIONE MOBILE
-    @RequestMapping(path = "/AddPatient", method = RequestMethod.POST)
+    @RequestMapping(path = "/Check", method = RequestMethod.POST)
     @ResponseBody
-    public Integer addPatient(@RequestBody Paziente Paz) {
+    public Integer checkLight(@RequestBody Paziente Paz) {
 
         int status;
         Paziente paz = Paz;
@@ -51,4 +51,25 @@ public class ServerController {
         }
         return status;
     }
+
+    @RequestMapping(path = "/Set", method = RequestMethod.POST)
+    @ResponseBody
+    public Integer setLight(@RequestBody Paziente Paz) {
+
+        int status;
+        Paziente paz = Paz;
+        int foundId = dao.checkPatient(paz.getCF());
+
+        if (foundId==0) {
+            dao.addNewPatient(paz.getCF(), paz.getNome(), paz.getCognome(), paz.getSesso(), paz.getBirthday(), paz.getResidenza(),
+                    paz.getTelefono(), paz.getAltezza(), paz.getPeso());
+            status = 0;
+        } else {
+
+            //status = (int) foundId;
+            status=foundId;
+        }
+        return status;
+    }
+
 }
