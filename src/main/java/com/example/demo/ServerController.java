@@ -4,9 +4,6 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-
 @RestController
 public class ServerController {
 
@@ -54,71 +51,4 @@ public class ServerController {
         }
         return status;
     }
-
-    @RequestMapping(path = "/AddExam", method = RequestMethod.POST)
-    @ResponseBody
-    public Integer addExam(@RequestBody Esame JsonEsame) {
-
-        int status;
-        Esame esa = JsonEsame;
-        int foundId = dao.checkExam(esa.getData());
-
-        if (foundId==0) {
-            dao.addNewExam(esa.getData(), esa.getIdEsame(),esa.getEmgMax(), esa.getEmgMin(), esa.getEmgAvg(), esa.getForMax(), esa.getForMin(), esa.getForAvg(),
-                    esa.getTempo(), esa.getPassi(), esa.getFrequenza(), esa.getVelocita(),dao.checkPatient(esa.getCF()));
-            status = 0;
-        } else {
-            //status = (int) foundId;
-            status=499;
-        }
-        return status;
-    }
-
-    //-----------------------------------------------------------------
-
-
-    //API ENDPOINT USATI DAL FRONTEND
-    @RequestMapping("/getPatients")
-    public List<Paziente> customerInformation() {
-        List<Paziente> paziente = dao.getAll();
-        return paziente;
-    }
-
-    @GetMapping(path = "/getById")
-    public @ResponseBody
-    List<Paziente> getAllUsers(@RequestParam int id) {
-
-        List<Paziente> paziente = dao.getById(id);
-        return paziente;
-    }
-
-
-    @GetMapping(path = "/getByName")
-    public @ResponseBody
-    List<Paziente> getAllUsers(@RequestParam String Nome) {
-
-        List<Paziente> paziente = dao.getByName(Nome);
-
-        return paziente;
-    }
-
-    @GetMapping(path = "/getEsami")
-    public @ResponseBody
-    List<Esame> getEsami(@RequestParam int idPaziente) {
-
-        List<Esame> Esame = dao.getEsami(idPaziente);
-
-        return Esame;
-    }
-
-    @GetMapping(path = "/getEsame")
-    public @ResponseBody
-    List<Esame> getEsame(@RequestParam int idEsame) {
-
-        List<Esame> Esame = dao.getEsame(idEsame);
-
-        return Esame;
-    }
-    //-----------------------------------------------------------------
-
 }
